@@ -56,6 +56,10 @@ inventory, so a medic's bag is visibly a medic's bag and holds only what a medic
 | `Bags.Hand` | Bags carried in the right hand. Same fields. |
 | `Bags.StateKey` | The player statebag name used to track the spawned props. |
 
+## Author
+
+Made by [DaemonAlex](https://github.com/DaemonAlex) for DelPerroSands.
+
 ## Other DPS scripts
 
 All of these are made for DelPerroSands and run together on one Qbox server. Each one works on
