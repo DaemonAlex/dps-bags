@@ -35,14 +35,25 @@ inv:registerHook('openInventory', function(payload)
     end
 end, {})
 
--- A player who disconnects leaves no bag floating behind.
+-- A player who disconnects leaves no bag floating behind. The ids come from the player's own game, so the server
+-- only ever deletes an object whose model is one of the bags: nothing else can be removed through this.
+local bagModel = {}
+for _, kind in ipairs({ Bags.Back, Bags.Hand }) do
+    for _, def in pairs(kind) do bagModel[joaat(def.model)] = true end
+end
+
 AddEventHandler('playerDropped', function()
     local ids = Player(source).state[Bags.StateKey]
     if type(ids) ~= 'table' then return end
+    local n = 0
     for _, netId in pairs(ids) do
-        if netId then
+        n = n + 1
+        if n > 4 then break end
+        if type(netId) == 'number' then
             local obj = NetworkGetEntityFromNetworkId(netId)
-            if obj ~= 0 and DoesEntityExist(obj) then DeleteEntity(obj) end
+            if obj ~= 0 and DoesEntityExist(obj) and GetEntityType(obj) == 3 and bagModel[GetEntityModel(obj)] then
+                DeleteEntity(obj)
+            end
         end
     end
 end)
